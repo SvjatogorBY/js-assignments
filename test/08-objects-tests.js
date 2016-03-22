@@ -230,7 +230,10 @@ describe('08-objects-tasks', function() {
         ].forEach(fn => {
             assert.throws(
                 fn,
-                'Element, id and pseudo-element should not occur more then one time inside the selector'
+                /Element, id and pseudo-element should not occur more then one time inside the selector/,
+                
+                '\nPlease throw an exception "Element, id and pseudo-element should not occur more then one time inside the selector" '+
+                'if element, id or pseudo-element occurs twice or more times'
             );
         });
 
@@ -241,7 +244,7 @@ describe('08-objects-tasks', function() {
         ].forEach(fn => {
             assert.doesNotThrow(
                 fn,
-                'Element, id and pseudo-element should not occur more then one time inside the selector'
+                /Element, id and pseudo-element should not occur more then one time inside the selector/
             );
         });
 
@@ -255,7 +258,10 @@ describe('08-objects-tasks', function() {
         ].forEach(fn => {
             assert.throws(
                 fn,
-                'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+                /Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element/,
+                
+                '\nPlease throw an exception "Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element" '+
+                'if selector parts arranged in an invalid order.'
             );
         });
 
