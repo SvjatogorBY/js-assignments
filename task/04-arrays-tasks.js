@@ -38,10 +38,7 @@ function findElement(arr, value) {
  *    5 => [ 1, 3, 5, 7, 9 ]
  */
 function generateOdds(len) {
-   /*var arr = new Array(len);
-   var item=-1;
-   return arr.map(()=>item+=2);*/
-   throw new Error('Not implemented');
+   return Array.from({length:len}).map((item,pos)=>2*pos+1);
 }
 
 
@@ -150,7 +147,7 @@ function getStringsLength(arr) {
  *    [ 1, 'b', 'c'], 0, 'x'  => [ 'x', 1, 'b', 'c' ]
  */
 function insertItem(arr, item, index) {
-   throw new Error('Not implemented');
+   arr.splice(index,0,item);
 }
 
 /**
@@ -164,7 +161,7 @@ function insertItem(arr, item, index) {
  *    [ 'a', 'b', 'c', 'd'], 3  => [ 'a', 'b', 'c' ]
  */
 function getHead(arr, n) {
-   throw new Error('Not implemented');
+   return arr.slice(0,n);
 }
 
 
@@ -273,9 +270,8 @@ function getSecondItems(arr) {
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
 function propagateItemsByPositionIndex(arr) {
-   throw new Error('Not implemented');
+   return arr.reduce((prev,cur,index) => prev.concat(Array(index+1).fill(cur)),[]);
 }
-
 
 /** 
  * Returns the 3 largest numbers from the specified array
@@ -358,7 +354,8 @@ function getItemsSum(arr) {
  *  [ null, undefined, NaN, false, 0, '' ]  => 6
  */
 function getFalsyValuesCount(arr) {
-   throw new Error('Not implemented');
+   var filter = [false, null, 0, "", undefined];
+   return arr.filter(x => filter.indexOf(x) != -1 || Number.isNaN(x)).length;
 }
 
 /**
@@ -376,7 +373,7 @@ function getFalsyValuesCount(arr) {
  *    [ true, 0, 1, 'true' ], true => 1
  */
 function findAllOccurences(arr, item) {
-   throw new Error('Not implemented');
+   return arr.filter(x => x===item).length;
 }
 
 /**
@@ -442,7 +439,11 @@ function sortCitiesArray(arr) {
  *           [0,0,0,0,1]]   
  */
 function getIdentityMatrix(n) {
-   throw new Error('Not implemented');
+   return Array.from({length:n},(item,index)=>{
+         var a = Array(n).fill(0);
+         a[index]=1;
+         return a;
+      });
 }
 
 /**
@@ -459,7 +460,7 @@ function getIdentityMatrix(n) {
  *     3, 3   => [ 3 ]
  */
 function getIntervalArray(start, end) {
-   throw new Error('Not implemented');
+   return Array.from({length:end-start+1},(item,index)=>index+start);
 }
 
 /**
@@ -564,8 +565,14 @@ function getElementByIndexes(arr, indexes) {
  * 
  */
 function swapHeadAndTail(arr) {
-    throw new Error('Not implemented');
+   var arrCenter = Math.floor(arr.length / 2);
+
+   if (!(arr.length % 2))
+      return arr.slice(arrCenter).concat(arr.slice(0,arrCenter));
+
+   return arr.slice(arrCenter+1).concat(arr[arrCenter],arr.slice(0,arrCenter));
 }
+
 
 
 module.exports = {
