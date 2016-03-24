@@ -287,7 +287,7 @@ function propagateItemsByPositionIndex(arr) {
  *   [ 10, 10, 10, 10 ] => [ 10, 10, 10 ]
  */
 function get3TopItems(arr) {
-   return arr.sort((a,b)=>a<b).slice(0,3);
+   return arr.sort((a,b)=>b-a).slice(0,3);
 }
  
  
@@ -322,7 +322,7 @@ function getPositivesCount(arr) {
  */
 function sortDigitNamesByNumericOrder(arr) {
    var digits = ['zero','one','two','three','four','five','six','seven','eight','nine'];
-   return arr.sort((a,b) => digits.indexOf(a) > digits.indexOf(b));
+   return arr.sort((a,b) => digits.indexOf(a) - digits.indexOf(b));
 }
 
 /** 
@@ -417,8 +417,17 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  */
 function sortCitiesArray(arr) {
-   throw new Error('Not implemented');
+   return arr.sort((a,b)=>{
+         if(a.country>b.country) return 1;
+         if(a.country<b.country) return -1;
+         if(a.city>b.city) return 1;
+         if(a.city<b.city) return -1;
+         return 0;
+      });
 }
+
+
+
 
 /**
  * Creates an indentity matrix of the specified size
@@ -475,7 +484,13 @@ function getIntervalArray(start, end) {
  *   [ 1, 1, 2, 2, 3, 3, 4, 4] => [ 1, 2, 3, 4]
  */
 function distinct(arr) {
-   throw new Error('Not implemented');
+   var tempArr = [];
+
+   return arr.filter(item=>{
+            var notInArr = tempArr.indexOf(item) == -1;
+            if(notInArr) tempArr.push(item);
+            return notInArr;
+       });
 }
 
 /**
@@ -509,7 +524,18 @@ function distinct(arr) {
  *   }
  */
 function group(array, keySelector, valueSelector) {
-   throw new Error('Not implemented');
+   //return arr.map(item=>item.country);
+   var keys = array.map(keySelector);
+   var values = array.map(valueSelector);
+
+   var map = new Map();
+
+   keys.map((item,index)=>{
+         if(typeof map.get(item) == 'undefined') map.set(item,[]);
+         map.get(item).push(values[index]);
+      });
+
+   return map;
 }
 
 
