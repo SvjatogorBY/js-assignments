@@ -102,8 +102,7 @@ function getArrayOfStrings(arr) {
  *    [ false, 0, NaN, '', undefined ]   => [ ]
  */
 function removeFalsyValues(arr) {
-   var filter = [false, null, 0, "", undefined];
-   return arr.filter(x => filter.indexOf(x) == -1 && !Number.isNaN(x));
+   return arr.filter(x => x);
 }
 
 /**
@@ -355,7 +354,7 @@ function getItemsSum(arr) {
  */
 function getFalsyValuesCount(arr) {
    var filter = [false, null, 0, "", undefined];
-   return arr.filter(x => filter.indexOf(x) != -1 || Number.isNaN(x)).length;
+   return arr.filter(x => !x).length;
 }
 
 /**
