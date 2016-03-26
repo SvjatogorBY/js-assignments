@@ -30,11 +30,11 @@
  *
  */
 function getFizzBuzz(num) {
-    if(!(num%3) && !(num%5)) return 'FizzBuzz';
-    else if(!(num%3)) return 'Fizz';
-    else if(!(num%5)) return 'Buzz';
+    var fbStr = '';
+    if(!(num%3)) fbStr += 'Fizz';
+    if(!(num%5)) fbStr += 'Buzz';
 
-    return num;
+    return fbStr || num;
 }
 
 
