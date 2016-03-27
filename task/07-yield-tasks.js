@@ -152,19 +152,15 @@ function* depthTraversalTree(root) {
 function* breadthTraversalTree(root) {
     var queue = [];
     queue.push(root);
-    var head = 0,end = 0;
+    var head = 0;
 
-    while(head <= end)
+    while(head < queue.length)
     {
         var cur = queue[head++];
 
         yield  cur;
 
-        if(cur.children)
-            cur.children.forEach(item=>{
-                end++;
-                queue[end] = item;
-            });
+        if(cur.children) Array.prototype.push.apply(queue,cur.children);
     }
 }
 
