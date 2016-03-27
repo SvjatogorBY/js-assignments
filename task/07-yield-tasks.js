@@ -33,7 +33,21 @@
  *
  */
 function* get99BottlesOfBeer() {
-    throw new Error('Not implemented');
+    var index = 99;
+
+    yield `${index} bottles of beer on the wall, ${index} bottles of beer.`;
+
+    for(var index=98;index>1;index--)
+    {
+        yield `Take one down and pass it around, ${index} bottles of beer on the wall.`;
+        yield `${index} bottles of beer on the wall, ${index} bottles of beer.`;
+    }
+
+    yield `Take one down and pass it around, 1 bottle of beer on the wall.`;
+    yield `1 bottle of beer on the wall, 1 bottle of beer.`;
+    yield 'Take one down and pass it around, no more bottles of beer on the wall.';
+    yield 'No more bottles of beer on the wall, no more bottles of beer.';
+    yield 'Go to the store and buy some more, 99 bottles of beer on the wall.';
 }
 
 
@@ -47,7 +61,19 @@ function* get99BottlesOfBeer() {
  *
  */
 function* getFibonacciSequence() {
-    throw new Error('Not implemented');
+    var fibPrev = 0;
+    var fibCur = 1;
+    var buf;
+
+    yield 0;
+    yield 1;
+
+    while(true)
+    {
+        buf = fibCur+fibPrev;
+        fibPrev = fibCur;
+        yield fibCur = buf;
+    }
 }
 
 
@@ -82,9 +108,25 @@ function* getFibonacciSequence() {
  *
  */
 function* depthTraversalTree(root) {
-    throw new Error('Not implemented');
-}
+    var stack = [];
+    stack[0] = root;
+    var head = 0;
 
+    while(head>=0)
+    {
+        var cur = stack[head];
+        head--;
+
+        yield  cur;
+
+        if(cur.children)
+            for(var i = cur.children.length-1;i>=0;i--)
+            {
+                head++;
+                stack[head] = cur.children[i];
+            }
+    }
+}
 
 /**
  * Traverses a tree using the breadth-first strategy
@@ -108,9 +150,23 @@ function* depthTraversalTree(root) {
  *
  */
 function* breadthTraversalTree(root) {
-    throw new Error('Not implemented');
-}
+    var queue = [];
+    queue.push(root);
+    var head = 0,end = 0;
 
+    while(head <= end)
+    {
+        var cur = queue[head++];
+
+        yield  cur;
+
+        if(cur.children)
+            cur.children.forEach(item=>{
+                end++;
+                queue[end] = item;
+            });
+    }
+}
 
 /**
  * Merges two yield-style sorted sequences into the one sorted sequence.
@@ -126,7 +182,27 @@ function* breadthTraversalTree(root) {
  *   [ 1, 3, 5, ... ], [ -1 ] => [ -1, 1, 3, 5, ...]
  */
 function* mergeSortedSequences(source1, source2) {
-    throw new Error('Not implemented');
+    var A = source1(),B=source2();
+    var a = A.next();
+    var b = B.next();
+
+    while(!a.done && !b.done)
+    {
+        if(a.value < b.value)
+        {
+            yield a.value;
+            a = A.next();
+        }
+        else
+        {
+            yield b.value;
+            b = B.next();
+        }
+    }
+
+    var fin = a.done ? A : B;
+
+    yield* [...fin];
 }
 
 
