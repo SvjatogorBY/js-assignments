@@ -23,7 +23,11 @@
  *    console.log(r.getArea());   // => 200
  */
 function Rectangle(width, height) {
-    throw new Error('Not implemented');
+    this.width=width;
+    this.height=height;
+    this.getArea = function(){
+        return width*height;
+    }
 }
 
 
@@ -38,7 +42,7 @@ function Rectangle(width, height) {
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
 function getJSON(obj) {
-    throw new Error('Not implemented');
+    return JSON.stringify(obj);
 }
 
 
@@ -54,6 +58,10 @@ function getJSON(obj) {
  *
  */
 function fromJSON(proto, json) {
+    /*var obj = JSON.parse(json);
+    obj.["__proto__"] = proto;
+    return obj;*/
+
     throw new Error('Not implemented');
 }
 
@@ -106,37 +114,118 @@ function fromJSON(proto, json) {
  *  For more examples see unit tests.
  */
 
-const cssSelectorBuilder = {
+/* initialState { propName: "", propValue: "" }
+ */
 
+var selectorPrototype = {
     element: function(value) {
-        throw new Error('Not implemented');
+        if(this.elementName) throw "Element, id and pseudo-element should not occur more then one time inside the selector";
+        if(this.idName || this.className || this.attrName || this.pseudoClassName || this.pseudoElementName)
+            throw "Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element";
+        this.elementName = value;
+        return this;
     },
 
     id: function(value) {
-        throw new Error('Not implemented');
+        if(this.idName) throw "Element, id and pseudo-element should not occur more then one time inside the selector";
+        if(this.className || this.attrName || this.pseudoClassName || this.pseudoElementName)
+            throw "Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element";
+        this.idName = value;
+        return this;
     },
 
     class: function(value) {
-        throw new Error('Not implemented');
+        if(this.attrName || this.pseudoClassName || this.pseudoElementName)
+            throw "Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element";
+        if(!this.className) this.className = [value];
+        else this.className.push(value);
+        return this;
     },
 
     attr: function(value) {
-        throw new Error('Not implemented');
+        if(this.pseudoClassName || this.pseudoElementName)
+            throw "Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element";
+        if(!this.attrName) this.attrName = [value];
+        else this.attrName.push(value);
+        return this;
     },
 
     pseudoClass: function(value) {
-        throw new Error('Not implemented');
+        if(this.pseudoElementName)
+            throw "Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element";
+        if(!this.pseudoClassName) this.pseudoClassName = [value];
+        else this.pseudoClassName.push(value);
+        return this;
     },
 
     pseudoElement: function(value) {
-        throw new Error('Not implemented');
+        if(this.pseudoElementName) throw "Element, id and pseudo-element should not occur more then one time inside the selector";
+        this.pseudoElementName = value;
+        return this;
+    },
+
+    stringify: function() {
+        return (this.elementName ? this.elementName : '') +
+            (this.idName ? `#${this.idName}` : '') +
+            (this.className ? `.${this.className.join('.')}` : '') +
+            (this.attrName ? `[${this.attrName.join(',')}]` : '') +
+            (this.pseudoClassName ? `:${this.pseudoClassName.join(':')}` : '') +
+            (this.pseudoElementName ? `::${this.pseudoElementName}` : '');
+    }
+};
+
+function Selector(initialState)
+{
+    this[initialState.propName + "Name"] = initialState.propValue;
+    this["__proto__"] = selectorPrototype;
+}
+
+function InitialState(propName,propValue)
+{
+    this.propName = propName;
+    this.propValue = propValue;
+}
+
+function PropertyGroup(value)
+{
+    this.data = value;
+
+    this.stringify = function()
+    {
+        return this.data;
+    }
+}
+
+const cssSelectorBuilder = {
+
+    element: function(value) {
+        return new Selector(new InitialState('element',value));
+    },
+
+    id: function(value) {
+        return new Selector(new InitialState('id',value));
+    },
+
+    class: function(value) {
+        return new Selector(new InitialState('class',[value]));
+    },
+
+    attr: function(value) {
+        return new Selector(new InitialState('attr',[value]));
+    },
+
+    pseudoClass: function(value) {
+        return new Selector(new InitialState('pseudoClass',[value]));
+    },
+
+    pseudoElement: function(value) {
+        return new Selector(new InitialState('pseudoElement',value));
     },
 
     combine: function(selector1, combinator, selector2) {
-        throw new Error('Not implemented');
+        return new PropertyGroup(`${selector1.stringify()} ${combinator} ${selector2.stringify()}`);
     },
 };
-
 
 module.exports = {
     Rectangle: Rectangle,
